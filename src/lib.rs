@@ -2,15 +2,40 @@ use proc_macro::TokenStream;
 use quote::{quote, ToTokens};
 use syn::{ItemFn, Stmt};
 
-/// Measures exection time of a function and prints it out
+/// Measures exection time of a function and prints it out <br> <br>
+/// **IMPORTANT** Only supports function that have void return type <br>
+/// # Examples
 ///
-///Mutates the function as follows with a wrapper
-///```
-/// let start = std::time::Instant::now();
-/// // Here is your original function
-/// let prefix = macro_input.to_string()
-/// println!("{} {:.3?}", prefix, start.elapsed());
-///```
+/// ## Default
+/// ```
+/// #[print_exec_time]
+/// fn add(a:i32,b:i32) -> i32 {
+///     a + b
+/// }
+///
+/// fn main() {
+///     let a = add(2,4);
+///     println!("{a}");
+///     // 6
+///     // <execution time>
+/// }
+/// ```
+/// ## With custom prefix message
+///
+/// ```
+/// #[print_exec_time(Add exec time : )]
+/// fn add(a:i32,b:i32) -> i32 {
+///     a + b
+/// }
+///
+/// fn main() {
+///     let a = add(2,4);
+///     println!("{a}");
+///     // 6
+///     // Add exec time : <execution time>
+/// }
+/// ```
+///
 #[proc_macro_attribute]
 pub fn print_exec_time(msg: TokenStream, item: TokenStream) -> TokenStream {
     let mut ast: ItemFn = syn::parse(item.clone()).unwrap();
