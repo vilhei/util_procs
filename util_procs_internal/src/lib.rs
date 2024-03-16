@@ -19,7 +19,7 @@
 /// let value = Foo::FIELD_NAMES;
 /// assert_eq!(expected, value);
 /// ```
-pub trait FieldNames<const T: usize> {
+pub trait FieldNames {
     /// Contains the names of struct's fields as string slices
-    const FIELD_NAMES: [&'static str; T];
+    const FIELD_NAMES: &'static [&'static str];
 }
