@@ -6,7 +6,7 @@ mod tests {
     use proc_macros::FieldNames;
     use util_procs_internal::FieldNames;
 
-    #[derive(Default, FieldNames)]
+    #[derive(FieldNames)]
     struct Foo {
         bar: String,
         id: i64,
@@ -14,7 +14,6 @@ mod tests {
         code: u32,
     }
 
-    #[derive(Default)]
     struct FooManual {
         bar: String,
         id: i64,
@@ -34,9 +33,8 @@ mod tests {
             "name".to_string(),
             "code".to_string(),
         ];
-        let value = Foo::FIELD_NAMES;
 
-        assert_eq!(expected, value);
+        assert_eq!(&expected, Foo::FIELD_NAMES);
     }
 
     #[test]
@@ -47,8 +45,14 @@ mod tests {
             "name".to_string(),
             "code".to_string(),
         ];
-        let value = FooManual::FIELD_NAMES;
 
-        assert_eq!(expected, value);
+        let f = Foo {
+            bar: Default::default(),
+            id: Default::default(),
+            name: Default::default(),
+            code: Default::default(),
+        };
+
+        assert_eq!(expected, FooManual::FIELD_NAMES);
     }
 }
