@@ -107,12 +107,10 @@ fn impl_field_names(input: &syn::DataStruct, struct_name: &syn::Ident) -> TokenS
         syn::Fields::Unnamed(_) => unimplemented!(),
         syn::Fields::Unit => unimplemented!(),
     };
-
+    let field_count = fields.len();
     quote! {
-        impl FieldNames for #struct_name {
-            fn field_names(&self) -> Vec<String> {
-                vec![#(#fields.to_string()),*]
-            }
+        impl FieldNames<#field_count> for #struct_name {
+            const FIELD_NAMES:[&'static str;#field_count] = [#(#fields),*];
         }
     }
     .into()

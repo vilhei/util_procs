@@ -22,8 +22,7 @@ mod tests {
             "name".to_string(),
             "code".to_string(),
         ];
-        let foo = Foo::default();
-        let value = foo.field_names();
+        let value = Foo::FIELD_NAMES;
 
         assert_eq!(expected, value);
     }
