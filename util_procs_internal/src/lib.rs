@@ -1,6 +1,8 @@
 /// Implements const [FieldNames::FIELD_NAMES] which should contain struct's field names as string slices.
 /// You should in reality implement this by deriving this trait.
 ///
+/// Also supports enums by listing enum variants names. **NOTE** only returns variants name does not care if variant has data inside it
+///
 /// Also see [FieldNames::field_names] if you need to access the field names through an object instead of the type.
 /// Has blanker implementation which just returns same reference as [FieldNames::FIELD_NAMES]
 ///

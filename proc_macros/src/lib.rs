@@ -1,6 +1,6 @@
 use proc_macro::TokenStream;
 use quote::{quote, ToTokens};
-use syn::{parse_quote, token::Struct, DataStruct, DeriveInput, ItemFn, Stmt};
+use syn::{DeriveInput, ItemFn, Stmt};
 
 /// Measures exection time of a function and prints it out <br> <br>
 /// **IMPORTANT** Only supports function that have void return type <br>
@@ -87,7 +87,7 @@ pub fn field_names(item: TokenStream) -> TokenStream {
 
     match ast.data {
         syn::Data::Struct(s) => impl_field_names(&s, &ast.ident),
-        syn::Data::Enum(_) => panic!("Macro not implemented for type : Enum"),
+        syn::Data::Enum(e) => impl_enum_names(&e, &ast.ident),
         syn::Data::Union(_) => panic!("Macro not implemented for type : Union"),
     }
 }
@@ -111,6 +111,17 @@ fn impl_field_names(input: &syn::DataStruct, struct_name: &syn::Ident) -> TokenS
     quote! {
         impl FieldNames for #struct_name {
             const FIELD_NAMES: &'static [&'static str] = &[#(#fields),*];
+        }
+    }
+    .into()
+}
+
+fn impl_enum_names(input: &syn::DataEnum, enum_name: &syn::Ident) -> TokenStream {
+    let variants: Vec<String> = input.variants.iter().map(|v| v.ident.to_string()).collect();
+
+    quote! {
+        impl FieldNames for #enum_name {
+            const FIELD_NAMES: &'static [&'static str] = &[#(#variants),*];
         }
     }
     .into()

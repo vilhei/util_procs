@@ -13,6 +13,7 @@ syn = { version = "2.0.39", features = [
     "extra-traits",
     "visit",
     "visit-mut",
+    "parsing",
 ] }
 quote = "1.0.33"
 prettyplease = "0.2.15"
