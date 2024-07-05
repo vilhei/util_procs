@@ -1,6 +1,6 @@
 use proc_macro::TokenStream;
-use quote::{quote, ToTokens};
-use syn::{DeriveInput, ItemFn, Stmt};
+use quote::{quote, quote_spanned, ToTokens};
+use syn::{parse::ParseStream, DeriveInput, ItemFn, Stmt};
 
 /// Measures exection time of a function and prints it out <br> <br>
 /// **IMPORTANT** Only supports function that have void return type <br>
@@ -88,7 +88,13 @@ pub fn field_names(item: TokenStream) -> TokenStream {
     match ast.data {
         syn::Data::Struct(s) => impl_field_names(&s, &ast.ident),
         syn::Data::Enum(e) => impl_enum_names(&e, &ast.ident),
-        syn::Data::Union(_) => panic!("Macro not implemented for type : Union"),
+        syn::Data::Union(_) => {
+            let ty_span = ast.ident.span();
+
+            syn::Error::new(ty_span, "Not implemented for unions")
+                .to_compile_error()
+                .into()
+        }
     }
 }
 
